@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>DataYield - Making Sense of Data</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Data Analytics and Machine Learning for operational improvement">
+        <meta name="keywords" content="Data Analytics, machine learning, artificial intelligence, python, R, java, Spark, Hadoop, SQL, VBA, d3.js, ISO9001:2008, Six Sigma">
+        <meta name="author" content="Alexander Sickert">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+        <style>
+
+            a:link {
+                color: #ffffff;
+            }
+
+            /* visited link */
+            a:visited {
+                color: #ffffff;
+            }
+
+            /* mouse over link */
+            a:hover {
+                color: #ffffff;
+            }
+
+            /* selected link */
+            a:active {
+                color: #ffffff;
+            }
+
+            body{
+                font-family: Arial;
+                background-color: #cc0000;
+                color: #ffffff;
+
+            }
+
+            div{
+                display: block;
+                visibility:  visible;     
+
+            }
+
+            div.infoDiv{
+                display: none;
+                visibility:  hidden;
+
+            }
+
+            div.container{
+                display: none;
+                visibility:  hidden;
+            }
+
+            table{
+                width: 100%;
+            }
+
+            td{
+                width: 200px;
+                border: 0px solid #cc0000;
+                text-align: center;
+            }
+
+            td.space20pct{
+                width: 20%;
+            }
+
+            td.infoTdClass{
+                text-align: left;
+            }
+
+            span.navigationArrows{
+
+                font-size: 40px;
+            }
+
+            span.button{
+                padding: 20px;
+                border: 1px solid #ffffff;
+                text-align: center;
+
+            }
+
+            span.storyContentDivClass{
+                font-size: 10px;
+                line-height: 170%;
+            }
+
+            span.headerDivClass{
+                font-size: 20pt;
+                font-style: italic;
+            }
+
+
+
+        </style>
+
+
+        <script>
+
+            // header
+            var header = "";
+
+            var slideLoadingDone = false;
+
+            // footer
+            var footer = "contact & disclaimer";
+
+            // slide text
+            var slides = new Array();
+            var currentSlide = -1;
+
+            /*
+             * Create a ajax object
+             * @returns {undefined}
+             */
+            function ajaxRequest() {
+                var http = false;
+                try {
+                    http = new XMLHttpRequest();
+                } catch (e1) {
+                    try {
+                        http = new ActiveXObject("Msxml2.xmlhttp");
+                    } catch (e2) {
+                        try {
+                            http = new ActiveXObject("Microsoft.xmlhttp");
+                        } catch (e3) {
+                            http = false;
+                        }
+                    }
+                }
+                return http;
+            }
+
+
+            /*
+             * send data to server via ajax and get method
+             * @returns {undefined}
+             */
+            function pushDataByGet(url, callback)
+            {
+                var http = ajaxRequest();
+                var mode = "GET";
+                http.open(mode, url, true);
+                http.onreadystatechange = function () {
+                    if (http.readyState === 4) {
+                        callback(http.responseText);
+                    }
+                };
+                http.send(mode);
+            }
+
+            /*
+             * Dump whatever comes to console
+             * @returns {undefined}
+             */
+            function defaultCallbackToConsole(x) {
+                console.log(x);
+            }
+
+
+            function log(level, topic, text) {
+                try {
+
+
+                    var nVer = navigator.appVersion;
+                    var nAgt = navigator.userAgent;
+                    var browserName = navigator.appName;
+                    var fullVersion = '' + parseFloat(navigator.appVersion);
+
+                    var info = '';
+
+                    info += "|" + nVer;
+                    info += "|" + nAgt;
+                    info += "|" + browserName;
+                    info += "|" + fullVersion;
+                    info += "|" + level;
+                    info += "|" + topic;
+                    info += "|" + text;
+
+                    info = encodeURI(info);
+                    defaultCallbackToConsole("sending: " + info);
+
+                    var url = "http://data-yield.com/logger.php?k=lk23645jha3sdf6uyeqwthavk45vk&info=" + info;
+                    pushDataByGet(url, defaultCallbackToConsole);
+                } catch (e) {
+                    defaultCallbackToConsole(e);
+                }
+            }
+
+            function loadSlideContent() {
+
+                for (var i = 1; i < 50; i++) {
+                    currSlide = "slide-" + i;
+
+                    var element = document.getElementById(currSlide);
+
+                    if (typeof (element) !== 'undefined' && element !== null)
+                    {
+                        slides.push(element.innerHTML);
+                    }
+                }
+            }
+
+            /*
+             * function to initialize the presentation
+             * @returns {undefined}
+             * 
+             */
+            function init() {
+
+                if (slideLoadingDone === false) {
+                    loadSlideContent();
+                    slideLoadingDone = true;
+                }
+
+
+
+                log("info", "init()", "...");
+
+                var slideText;
+                var slidesText;
+
+
+                if (currentSlide === -1) {
+                    currentSlide = 0;
+                }
+
+                // set the div visible
+                hide("info");
+                show("story");
+
+                slideText = currentSlide + 1;
+                slidesText = slides.length;
+
+                // http://htmlarrows.com/  html arrows
+
+                document.getElementById("headerStory").innerHTML = header + " " + slideText + "/" + slidesText;
+                document.getElementById("previous").innerHTML = "&#171;";
+                document.getElementById("content").innerHTML = slides[currentSlide];
+                document.getElementById("next").innerHTML = "&#187;";
+
+                fit();
+                console.log("done");
+                log("info", "init() executed", "");
+            }
+
+            function next() {
+
+                log("info", "next()", "...");
+
+                var slideText;
+                var slidesText;
+
+                console.log("next");
+                var nextSlide;
+                if (currentSlide === slides.length - 1) {
+                    nextSlide = 0;
+                } else {
+                    nextSlide = currentSlide + 1;
+                }
+
+                slideText = nextSlide + 1;
+                slidesText = slides.length;
+
+                document.getElementById("headerStory").innerHTML = header + " " + slideText + " / " + slidesText;
+                document.getElementById("content").innerHTML = slides[nextSlide];
+
+                currentSlide = nextSlide;
+                fit();
+                log("info", "next() clicked", currentSlide);
+
+            }
+
+            function previous() {
+
+                var slideText;
+                var slidesText;
+
+                console.log("previous");
+                var nextSlide;
+                if (currentSlide === 0) {
+                    nextSlide = slides.length - 1;
+                } else {
+                    nextSlide = currentSlide - 1;
+                }
+
+                slideText = nextSlide + 1;
+                slidesText = slides.length;
+
+
+                document.getElementById("headerStory").innerHTML = header + " " + slideText + " / " + slidesText;
+                document.getElementById("content").innerHTML = slides[nextSlide];
+                currentSlide = nextSlide;
+                fit();
+                log("info", "previous() clicked", currentSlide);
+
+            }
+
+
+            function fit() {
+
+                var h = getHeight();
+                var w = getWidth();
+
+                document.getElementById("tdPrevious").style.width = "10%";
+                document.getElementById("tdNext").style.width = "10%";
+
+                document.getElementById("tdHead").style.height = Math.floor(h * 0.1) + "px";
+                document.getElementById("tdNext").style.height = Math.floor(h * 0.65) + "px";
+                document.getElementById("tdFoot1").style.height = Math.floor(h * 0.1) + "px";
+                document.getElementById("tdFoot2").style.height = Math.floor(h * 0.1) + "px";
+
+                var area = h * w;
+                var res = 0;
+                var minRes = 15;
+                var arrowSize = 40;
+                var paddingSize = 5;
+                var resAdj = 0;
+
+
+                var c = document.getElementById("content").innerHTML;
+
+                var minArea = 300000;
+                var diff = area - minArea;
+
+                console.log("diff is " + diff);
+                var addition = Math.floor(area / 75000);
+                res = minRes + Math.floor(addition * 2);
+                arrowSize = arrowSize + (addition * 2);
+                paddingSize = paddingSize + Math.floor(addition * 0.7);
+
+                resAdj = res;
+
+                var txtClean = c.replace(/<[^>]*>/g, "");
+
+
+                if (txtClean.length <= 30) {
+                    resAdj = Math.floor(res * 1.5);
+                }
+                ;
+                if (txtClean.length <= 20) {
+                    resAdj = Math.floor(res * 2);
+                }
+                ;
+
+                if (txtClean.length >= 100) {
+                    resAdj = Math.floor(res * 0.9);
+                }
+                ;
+                if (txtClean.length >= 150) {
+                    resAdj = Math.floor(res * 0.8);
+                }
+                ;
+
+
+                console.log("resizing to " + res);
+                document.getElementById("content").style.fontSize = resAdj + "px";
+
+                document.getElementById("next").style.fontSize = arrowSize + "px";
+                document.getElementById("previous").style.fontSize = arrowSize + "px";
+
+                document.getElementById("button1").style.padding = paddingSize + "px";
+                document.getElementById("button2").style.padding = paddingSize + "px";
+                document.getElementById("button3").style.padding = paddingSize + "px";
+                document.getElementById("button4").style.padding = paddingSize + "px";
+
+
+
+
+                log("info", "fit()", "done");
+
+            }
+
+
+
+            /*  
+             *   Load the story
+             */
+            function home() {
+                init();
+            }
+
+            /*  
+             *   Load the info page
+             */
+            function info() {
+                hide("story");
+                show("info");
+
+                var h = getHeight();
+
+
+                document.getElementById("tdInfoFooter").style.height = Math.floor(h * 0.1) + "px";
+                document.getElementById("tdInfoHead").style.height = Math.floor(h * 0.1) + "px";
+
+                log("info", "info() clicked", "");
+                //alert( getHeight());
+            }
+
+            function show(id) {
+                document.getElementById(id).style.display = "block";
+                document.getElementById(id).style.visibility = "visible";
+            }
+
+            function hide(id) {
+                document.getElementById(id).style.display = "none";
+                document.getElementById(id).style.visibility = "hidden";
+            }
+
+
+
+// width of screen
+            function getWidth() {
+                var screenWidth = 0;
+
+                try {
+                    if (screenWidth < window.innerWidth) {
+                        screenWidth = window.innerWidth;
+                    }
+                    ;
+                } catch (e) {
+                    log("error", "2 getWidth()", "error when positioning id:  error: " + e.description);
+                }
+
+                console.log("screenWidth: " + screenWidth);
+                log("info", "getWidth()", "screenWidth: " + screenWidth);
+                return screenWidth;
+            }
+            function getHeight() {
+                var screenHeight = 0;
+
+                try {
+                    if (screenHeight < window.innerHeight) {
+                        screenHeight = window.innerHeight;
+                    }
+
+                } catch (e) {
+                    log("error", "2 getHeight()", "error when positioning id:  error: " + e.description);
+                }
+
+                console.log("screenHeight: " + screenHeight);
+                log("info", "getHeight()", "screenHeight: " + screenHeight);
+                return screenHeight;
+
+            }
+
+            function myResize() {
+                console.log("resizing");
+                fit();
+            }
+            window.onresize = myResize;
+
+
+        </script>
+
+
+
+    </head>
+    <body onload="init();">
+
+        <div id="story" class="storyDiv"   >
+            <table>
+                <tr>
+                    <td colspan="3" id="tdHead" class="headerTdClass"><span id="headerStory" class="headerDivClass"></span></td>
+                </tr>
+                <td colspan="1" id="tdPrevious" onclick="previous()"><span id="previous"  class="navigationArrows"></span></td>
+                <td colspan="1" ><span id="content"   class="storyContentDivClass"></span></td>
+                <td colspan="1" id="tdNext" onclick="next()"><span id="next"   class="navigationArrows"></span></td>
+
+                <tr>
+                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">NEXT&nbsp;&#187;</span></td>
+                </tr>
+
+                <tr>
+                    <td colspan="3" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="button">contact & disclaimer</span></td>
+                </tr>
+
+
+            </table>
+
+        </div>
+
+
+        <div id="info" class="infoDiv"  >
+            <table>
+                <tr>
+                    <td colspan="3" id="tdInfoHead" class="headerTdClass" onclick="home()"><span id="button4" class="button">home</span></td>
+                </tr>
+                <tr>  
+                    <td class="space20pct">&nbsp;</td>
+
+                    <td colspan="1" id="tdInfoContent" class="infoTdClass" >
+
+                        <b>Contact</b><br><br>
+                        <a href="mailto:alex@data-yield.com" >alex@data-yield.com</a><br/>
+                        <a href="https://ua.linkedin.com/in/alexandersickert" target="_blank">LinkedIn</a><br/>
+                        <a href="https://www.facebook.com/DataYield-218722151512602/" target="_blank">Facebook</a><br/>
+                        <a href="http://alexandersickert.com" target="_blank">Blog</a><br/>
+                        <a href="https://github.com/AlexSickert" target="_blank">GitHub</a><br/><br/>
+
+                        <b>Address</b><br><br>
+                        DataYield GmbH<br>                           
+                        Adlerstrasse 3<br>
+                        73557 Mutlangen<br>
+                        Deutschland<br>
+                        <br>
+                        Amtsgericht Ulm HRB 733063<br>
+                        USt-IdNr.: DE254367867<br>
+                        Geschäftsführer: Alexander Sickert<br>
+                        Mail: alex@alexandersickert.com<br>
+                        Phone: +49 (0)176-2060-7353<br><br>
+
+                        <b>Disclaimer</b><br><br>
+
+                        Haftung für Inhalte<br>
+
+                        Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.<br>
+
+                        Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei bekannt werden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.<br>
+
+                        Haftung für Links<br>
+
+                        Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei bekannt werden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.<br><br>
+
+                        Urheberrecht<br>
+
+                        Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
+
+                        Die Betreiber der Seiten sind bemüht, stets die Urheberrechte anderer zu beachten bzw. auf selbst erstellte sowie lizenzfreie Werke zurückzugreifen.<br><br>
+
+                        Datenschutz<br>
+
+                        Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder eMail-Adressen) erhoben werden, erfolgt dies soweit möglich stets auf freiwilliger Basis. Die Nutzung der Angebote und Dienste ist, soweit möglich, stets ohne Angabe personenbezogener Daten möglich.<br>
+
+                        Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.<br>
+
+                        Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.<br>
+
+
+                    </td>
+
+                    <td class="space20pct">&nbsp;</td>
+
+                </tr>
+
+                <tr>
+                    <td colspan="3" id="tdInfoFooter" class="footerTdClass" onclick="home()" ><span id="button3" class="button">home</span></td>
+                </tr>
+
+
+            </table>
+
+        </div>     
+
+        <div id="slide-1" class="container"  >DataYield<br/>in a<br/>nutshell...</div>
+        <div id="slide-2" class="container"  >DataYield = Use data, convert it into information that is meaningful for decision making.  </div>
+        <div id="slide-3" class="container"  >A constant stream of good decisions leads to superior performance. And superior performance &#8680; Yield.  </div>
+        <div id="slide-4" class="container"  >I’m familiar with concepts like TQM, Lean, Agile, Six Sigma, ISO9001, ITIL, SAF, Continuous improvement and apply them in professional services organizations. </div>
+        <div id="slide-5" class="container"  >In professional services the only assets are people and relationships. Therefore, any operational improvement approach requires an in-depth understanding of human resource management - in particular motivation and change management. </div>
+        <div id="slide-6" class="container"  >Decisions should be based on information. Information requires data and analysis. This again requires knowledge in statistics and the ability to use tools for data extraction, analysis and visualization.</div>
+        <div id="slide-7" class="container"  >I code in Java, Python, R, JavaScript, Visual Basic and am familiar with SQL databases as well as Spark/Hadoop. For data visualization I use R presentation, shinyapps.io, PowerPoint, Google Spreadsheets or d3.js. </div>
+        <div id="slide-8" class="container"  >A word of caution, though: Don’t forget to appreciate the value of <b><i>intuition</i></b> and <b><i>gut feeling</i></b>. </div>
+        <div id="slide-9" class="container"  >That’s it in a nutshell.  </div>
+        <div id="slide-10" class="container"  >I’m usually busy but <b><i>always</i></b> more than happy to help. Let’s talk...   </div>
+        <div id="slide-11" class="container"  ><a href="mailto:alex@data-yield.com" >alex@data-yield.com</a><br/><a href="https://ua.linkedin.com/in/alexandersickert" target="_blank">LinkedIn</a>&nbsp;<a href="https://www.facebook.com/DataYield-218722151512602/" target="_blank">Facebook</a><br/><a href="http://alexandersickert.com" target="_blank">Blog</a><br/><a href="https://github.com/AlexSickert" target="_blank">GitHub</a></div>
+
+    </body>
+</html>
