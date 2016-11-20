@@ -272,7 +272,7 @@
 
                 currentSlide = nextSlide;
                 fit();
-                log("info", "next() clicked", currentSlide);
+                log("info", "next() clicked", "slide now: " + currentSlide);
 
             }
 
@@ -297,7 +297,7 @@
                 document.getElementById("content").innerHTML = slides[nextSlide];
                 currentSlide = nextSlide;
                 fit();
-                log("info", "previous() clicked", currentSlide);
+                log("info", "previous() clicked", "slide now: " + currentSlide);
 
             }
 
