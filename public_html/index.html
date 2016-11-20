@@ -101,6 +101,10 @@
 
 
         <script>
+            
+            
+            // for timing events
+            var lastTimeStamp = (new Date()).getTime();
 
             // header
             var header = "";
@@ -135,6 +139,8 @@
                 }
                 return http;
             }
+            
+            
 
 
             /*
@@ -160,6 +166,23 @@
              */
             function defaultCallbackToConsole(x) {
                 console.log(x);
+            }
+            
+            
+            function recordTimeSpan(){
+                try {
+                    
+                    var diff;
+                    var timeRighNow = (new Date()).getTime();
+                    diff = timeRighNow - lastTimeStamp;
+                    lastTimeStamp = timeRighNow;
+                    
+                    log("info", "user-action-time-span-milliseconds", diff);
+                
+                } catch (e) {
+                    defaultCallbackToConsole(e);
+                }
+                
             }
 
 
@@ -247,6 +270,7 @@
                 fit();
                 console.log("done");
                 log("info", "init() executed", "");
+                recordTimeSpan();
             }
 
             function next() {
@@ -273,6 +297,7 @@
                 currentSlide = nextSlide;
                 fit();
                 log("info", "next() clicked", "slide now: " + currentSlide);
+                recordTimeSpan();
 
             }
 
@@ -298,6 +323,7 @@
                 currentSlide = nextSlide;
                 fit();
                 log("info", "previous() clicked", "slide now: " + currentSlide);
+                recordTimeSpan();
 
             }
 
@@ -400,6 +426,7 @@
 
                 log("info", "info() clicked", "");
                 //alert( getHeight());
+                recordTimeSpan();
             }
 
             function show(id) {
@@ -473,11 +500,11 @@
                 <td colspan="1" id="tdNext" onclick="next()"><span id="next"   class="navigationArrows"></span></td>
 
                 <tr>
-                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">NEXT&nbsp;&#187;</span></td>
+                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">Next&nbsp;Page&nbsp;&#187;</span></td>
                 </tr>
 
                 <tr>
-                    <td colspan="3" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="button">contact & disclaimer</span></td>
+                    <td colspan="3" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="button">Contact & Disclaimer</span></td>
                 </tr>
 
 
@@ -489,7 +516,7 @@
         <div id="info" class="infoDiv"  >
             <table>
                 <tr>
-                    <td colspan="3" id="tdInfoHead" class="headerTdClass" onclick="home()"><span id="button4" class="button">home</span></td>
+                    <td colspan="3" id="tdInfoHead" class="headerTdClass" onclick="home()"><span id="button4" class="button">Home</span></td>
                 </tr>
                 <tr>  
                     <td class="space20pct">&nbsp;</td>
