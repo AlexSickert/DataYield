@@ -35,19 +35,16 @@
                 font-family: Arial;
                 background-color: #cc0000;
                 color: #ffffff;
-
             }
 
             div{
                 display: block;
-                visibility:  visible;     
-
+                visibility:  visible;    
             }
 
             div.infoDiv{
                 display: none;
                 visibility:  hidden;
-
             }
 
             div.container{
@@ -74,7 +71,6 @@
             }
 
             span.navigationArrows{
-
                 font-size: 40px;
             }
 
@@ -82,7 +78,6 @@
                 padding: 20px;
                 border: 1px solid #ffffff;
                 text-align: center;
-
             }
 
             span.storyContentDivClass{
@@ -95,14 +90,12 @@
                 font-style: italic;
             }
 
-
-
         </style>
 
 
         <script>
-            
-            
+
+
             // for timing events
             var lastTimeStamp = (new Date()).getTime();
 
@@ -139,8 +132,8 @@
                 }
                 return http;
             }
-            
-            
+
+
 
 
             /*
@@ -167,22 +160,22 @@
             function defaultCallbackToConsole(x) {
                 console.log(x);
             }
-            
-            
-            function recordTimeSpan(){
+
+
+            function recordTimeSpan() {
                 try {
-                    
+
                     var diff;
                     var timeRighNow = (new Date()).getTime();
                     diff = timeRighNow - lastTimeStamp;
                     lastTimeStamp = timeRighNow;
-                    
+
                     log("info", "user-action-time-span-milliseconds", diff);
-                
+
                 } catch (e) {
                     defaultCallbackToConsole(e);
                 }
-                
+
             }
 
 
@@ -204,6 +197,11 @@
                     info += "|" + level;
                     info += "|" + topic;
                     info += "|" + text;
+                    info += "|";
+
+                    if ('referrer' in document) {
+                        info += document.referrer;
+                    }
 
                     info = encodeURI(info);
                     defaultCallbackToConsole("sending: " + info);
@@ -271,6 +269,10 @@
                 console.log("done");
                 log("info", "init() executed", "");
                 recordTimeSpan();
+                
+                // initialize swipe event handling
+                startup();
+                
             }
 
             function next() {
@@ -483,6 +485,175 @@
             window.onresize = myResize;
 
 
+            // key events
+
+            function TasteGedrueckt(Ereignis) {
+                if (!Ereignis) {
+                    Ereignis = window.event;
+                }
+
+
+                if (Ereignis.which) {
+                    Tastencode = Ereignis.which;
+                } else if (Ereignis.keyCode) {
+                    Tastencode = Ereignis.keyCode;
+                }
+
+                if (Tastencode === 37) {
+                    previous();
+                }
+
+                if (Tastencode === 39) {
+                    next();
+                }
+
+            }
+
+            document.onkeydown = TasteGedrueckt;
+
+            // touch event
+
+            var triggerElementID = null; // this variable is used to identity the triggering element
+            var fingerCount = 0;
+            var startX = 0;
+            var startY = 0;
+            var curX = 0;
+            var curY = 0;
+            var deltaX = 0;
+            var deltaY = 0;
+            var horzDiff = 0;
+            var vertDiff = 0;
+            var minLength = 72; // the shortest distance the user may swipe
+            var swipeLength = 0;
+            var swipeAngle = null;
+            var swipeDirection = null;
+
+            // The 4 Touch Event Handlers
+
+            // NOTE: the touchStart handler should also receive the ID of the triggering element
+            // make sure its ID is passed in the event call placed in the element declaration, like:
+            // <div id="picture-frame" ontouchstart="touchStart(event,'picture-frame');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);">
+
+            function touchStart(event, passedName) {
+                alert(1);
+                // disable the standard ability to select the touched object
+                event.preventDefault();
+                // get the total number of fingers touching the screen
+                fingerCount = event.touches.length;
+                // since we're looking for a swipe (single finger) and not a gesture (multiple fingers),
+                // check that only one finger was used
+                if (fingerCount == 1) {
+                    // get the coordinates of the touch
+                    startX = event.touches[0].pageX;
+                    startY = event.touches[0].pageY;
+                    // store the triggering element ID
+                    triggerElementID = passedName;
+                } else {
+                    // more than one finger touched so cancel
+                    touchCancel(event);
+                }
+            }
+
+            function touchMove(event) {
+                event.preventDefault();
+                if (event.touches.length == 1) {
+                    curX = event.touches[0].pageX;
+                    curY = event.touches[0].pageY;
+                } else {
+                    touchCancel(event);
+                }
+            }
+
+            function touchEnd(event) {
+                event.preventDefault();
+                // check to see if more than one finger was used and that there is an ending coordinate
+                if (fingerCount == 1 && curX != 0) {
+                    // use the Distance Formula to determine the length of the swipe
+                    swipeLength = Math.round(Math.sqrt(Math.pow(curX - startX, 2) + Math.pow(curY - startY, 2)));
+                    // if the user swiped more than the minimum length, perform the appropriate action
+                    if (swipeLength >= minLength) {
+                        caluculateAngle();
+                        determineSwipeDirection();
+                        processingRoutine();
+                        touchCancel(event); // reset the variables
+                    } else {
+                        touchCancel(event);
+                    }
+                } else {
+                    touchCancel(event);
+                }
+            }
+
+            function touchCancel(event) {
+                // reset the variables back to default values
+                fingerCount = 0;
+                startX = 0;
+                startY = 0;
+                curX = 0;
+                curY = 0;
+                deltaX = 0;
+                deltaY = 0;
+                horzDiff = 0;
+                vertDiff = 0;
+                swipeLength = 0;
+                swipeAngle = null;
+                swipeDirection = null;
+                triggerElementID = null;
+            }
+
+            function caluculateAngle() {
+                var X = startX - curX;
+                var Y = curY - startY;
+                var Z = Math.round(Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2))); //the distance - rounded - in pixels
+                var r = Math.atan2(Y, X); //angle in radians (Cartesian system)
+                swipeAngle = Math.round(r * 180 / Math.PI); //angle in degrees
+                if (swipeAngle < 0) {
+                    swipeAngle = 360 - Math.abs(swipeAngle);
+                }
+            }
+
+            function determineSwipeDirection() {
+                if ((swipeAngle <= 45) && (swipeAngle >= 0)) {
+                    swipeDirection = 'left';
+                } else if ((swipeAngle <= 360) && (swipeAngle >= 315)) {
+                    swipeDirection = 'left';
+                } else if ((swipeAngle >= 135) && (swipeAngle <= 225)) {
+                    swipeDirection = 'right';
+                } else if ((swipeAngle > 45) && (swipeAngle < 135)) {
+                    swipeDirection = 'down';
+                } else {
+                    swipeDirection = 'up';
+                }
+            }
+
+            function processingRoutine() {
+                var swipedElement = document.getElementById(triggerElementID);
+                if (swipeDirection == 'left') {
+                    // REPLACE WITH YOUR ROUTINES
+                    swipedElement.style.backgroundColor = 'orange';
+                } else if (swipeDirection == 'right') {
+                    // REPLACE WITH YOUR ROUTINES
+                    swipedElement.style.backgroundColor = 'green';
+                } else if (swipeDirection == 'up') {
+                    // REPLACE WITH YOUR ROUTINES
+                    swipedElement.style.backgroundColor = 'maroon';
+                } else if (swipeDirection == 'down') {
+                    // REPLACE WITH YOUR ROUTINES
+                    swipedElement.style.backgroundColor = 'purple';
+                }
+            }
+
+            function startup() {                
+                var el = document.getElementById("content");
+                el.addEventListener("touchstart", touchStart, false);
+                el.addEventListener("touchend", touchEnd, false);
+                el.addEventListener("touchcancel", touchCancel, false);
+                el.addEventListener("touchmove", touchMove, false);
+                console.log("initialized.");
+            }
+
+
+
         </script>
 
 
@@ -490,13 +661,13 @@
     </head>
     <body onload="init();">
 
-        <div id="story" class="storyDiv"   >
+        <div id="story" class="storyDiv"   ontouchstart="touchStart(event,'story');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);"  >
             <table>
                 <tr>
                     <td colspan="3" id="tdHead" class="headerTdClass"><span id="headerStory" class="headerDivClass"></span></td>
                 </tr>
                 <td colspan="1" id="tdPrevious" onclick="previous()"><span id="previous"  class="navigationArrows"></span></td>
-                <td colspan="1" ><span id="content"   class="storyContentDivClass"></span></td>
+                <td colspan="1" ><span id="content"   class="storyContentDivClass"  ontouchstart="touchStart(event,'content');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);" ></span></td>
                 <td colspan="1" id="tdNext" onclick="next()"><span id="next"   class="navigationArrows"></span></td>
 
                 <tr>
