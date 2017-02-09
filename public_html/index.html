@@ -12,6 +12,11 @@
 
         <style>
 
+            @import url(https://fonts.googleapis.com/css?family=Lato:100,900,thin);
+            @import url(https://fonts.googleapis.com/css?family=Lusitana);
+
+            
+
             a:link {
                 color: #ffffff;
             }
@@ -32,7 +37,8 @@
             }
 
             body{
-                font-family: Arial;
+                font-family: Arial; 
+                
                 background-color: #cc0000;
                 color: #ffffff;
             }
@@ -48,6 +54,7 @@
             }
 
             div.container{
+                font-family: 'Lusitana',serif;  
                 display: none;
                 visibility:  hidden;
             }
@@ -69,7 +76,18 @@
             td.infoTdClass{
                 text-align: left;
             }
+            
+            span.logo1{
+                font-family: 'Lato';
+                font-weight: 900;
+                
+            }
 
+            span.logo2{
+                font-family: 'Lato';
+                font-weight: 200;
+            }
+            
             span.navigationArrows{
                 font-size: 40px;
             }
@@ -81,6 +99,7 @@
             }
 
             span.storyContentDivClass{
+                font-family: 'Lusitana',serif;  
                 font-size: 10px;
                 line-height: 170%;
             }
@@ -269,10 +288,10 @@
                 console.log("done");
                 log("info", "init() executed", "");
                 recordTimeSpan();
-                
+
                 // initialize swipe event handling
                 startup();
-                
+
             }
 
             function next() {
@@ -643,7 +662,7 @@
                 }
             }
 
-            function startup() {                
+            function startup() {
                 var el = document.getElementById("content");
                 el.addEventListener("touchstart", touchStart, false);
                 el.addEventListener("touchend", touchEnd, false);
@@ -755,7 +774,7 @@
 
         </div>     
 
-        <div id="slide-1" class="container"  >DataYield<br/>in a<br/>nutshell...</div>
+        <div id="slide-1" class="container"  ><span class="logo1" >DATA</span><span class="logo2">YIELD</span><br/>in a<br/>nutshell...</div>
         <div id="slide-2" class="container"  >DataYield = Use data, convert it into information that is meaningful for decision making.  </div>
         <div id="slide-3" class="container"  >A constant stream of good decisions leads to superior performance. And superior performance &#8680; Yield.  </div>
         <div id="slide-4" class="container"  >I’m familiar with concepts like TQM, Lean, Agile, Six Sigma, ISO9001, ITIL, SAF, Continuous improvement and apply them in professional services organizations. </div>
