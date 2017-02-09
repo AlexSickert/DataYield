@@ -97,6 +97,12 @@
                 border: 1px solid #ffffff;
                 text-align: center;
             }
+            
+            span.buttonSmall{
+                padding: 5px;
+                border: 0px solid #ffffff;
+                text-align: center;
+            }
 
             span.storyContentDivClass{
                 font-family: 'Lusitana',serif;  
@@ -683,19 +689,17 @@
         <div id="story" class="storyDiv"   ontouchstart="touchStart(event,'story');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);"  >
             <table>
                 <tr>
-                    <td colspan="3" id="tdHead" class="headerTdClass"><span id="headerStory" class="headerDivClass"></span></td>
+                    <td colspan="1" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="buttonSmall">Contact</span></td>
+                    <td colspan="1" id="tdHead" class="headerTdClass"><span id="headerStory" class="headerDivClass"></span></td>
+                    <td colspan="1" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="buttonSmall">Disclaimer</span></td>
                 </tr>
                 <td colspan="1" id="tdPrevious" onclick="previous()"><span id="previous"  class="navigationArrows"></span></td>
                 <td colspan="1" ><span id="content"   class="storyContentDivClass"  ontouchstart="touchStart(event,'content');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);" ></span></td>
                 <td colspan="1" id="tdNext" onclick="next()"><span id="next"   class="navigationArrows"></span></td>
 
-                <tr>
-                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">Next&nbsp;Page&nbsp;&#187;</span></td>
-                </tr>
-
-                <tr>
-                    <td colspan="3" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="button">Contact & Disclaimer</span></td>
-                </tr>
+                <tr>                    
+                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">Swipe or Click - Next&nbsp;Page&nbsp;&#187;</span></td>    
+                </tr>            
 
 
             </table>
