@@ -15,8 +15,6 @@
             @import url(https://fonts.googleapis.com/css?family=Lato:100,200,300,900,thin);
             @import url(https://fonts.googleapis.com/css?family=Lusitana);
 
-            
-
             a:link {
                 color: #ffffff;
             }
@@ -38,7 +36,7 @@
 
             body{
                 font-family: Arial; 
-                
+
                 background-color: #cc0000;
                 color: #ffffff;
             }
@@ -76,18 +74,18 @@
             td.infoTdClass{
                 text-align: left;
             }
-            
+
             span.logo1{
                 font-family: 'Lato';
                 font-weight: 900;
-                
+
             }
 
             span.logo2{
                 font-family: 'Lato';
                 font-weight: 300;
             }
-            
+
             span.navigationArrows{
                 font-size: 40px;
             }
@@ -97,11 +95,19 @@
                 border: 1px solid #ffffff;
                 text-align: center;
             }
-            
+
             span.buttonSmall{
                 padding: 5px;
                 border: 0px solid #ffffff;
                 text-align: center;
+            }
+
+            span.buttonWhite{
+                /* padding: 2px;
+                background-color: #ffffff;
+                color: #111111;  */
+                text-decoration: underline;
+                /* border: 1px solid #ffffff;  */
             }
 
             span.storyContentDivClass{
@@ -387,7 +393,8 @@
                 arrowSize = arrowSize + (addition * 2);
                 paddingSize = paddingSize + Math.floor(addition * 0.7);
 
-                resAdj = res;
+                resAdj = res * 1.5;
+                //resAdj = res * 10;
 
                 var txtClean = c.replace(/<[^>]*>/g, "");
 
@@ -413,18 +420,13 @@
 
                 console.log("resizing to " + res);
                 document.getElementById("content").style.fontSize = resAdj + "px";
-
                 document.getElementById("next").style.fontSize = arrowSize + "px";
                 document.getElementById("previous").style.fontSize = arrowSize + "px";
-
                 document.getElementById("button1").style.padding = paddingSize + "px";
                 document.getElementById("button2").style.padding = paddingSize + "px";
                 document.getElementById("button3").style.padding = paddingSize + "px";
                 document.getElementById("button4").style.padding = paddingSize + "px";
-
-
-
-
+                
                 log("info", "fit()", "done");
 
             }
@@ -560,7 +562,7 @@
             // <div id="picture-frame" ontouchstart="touchStart(event,'picture-frame');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);">
 
             function touchStart(event, passedName) {
-                alert(1);
+                //alert(1);
                 // disable the standard ability to select the touched object
                 event.preventDefault();
                 // get the total number of fingers touching the screen
@@ -655,16 +657,18 @@
                 var swipedElement = document.getElementById(triggerElementID);
                 if (swipeDirection == 'left') {
                     // REPLACE WITH YOUR ROUTINES
-                    swipedElement.style.backgroundColor = 'orange';
+                    next();
+                    // swipedElement.style.backgroundColor = 'orange';
                 } else if (swipeDirection == 'right') {
                     // REPLACE WITH YOUR ROUTINES
-                    swipedElement.style.backgroundColor = 'green';
+                    previous();
+                    // swipedElement.style.backgroundColor = 'green';
                 } else if (swipeDirection == 'up') {
                     // REPLACE WITH YOUR ROUTINES
-                    swipedElement.style.backgroundColor = 'maroon';
+                    // swipedElement.style.backgroundColor = 'maroon';
                 } else if (swipeDirection == 'down') {
                     // REPLACE WITH YOUR ROUTINES
-                    swipedElement.style.backgroundColor = 'purple';
+                    // swipedElement.style.backgroundColor = 'purple';
                 }
             }
 
@@ -677,33 +681,41 @@
                 console.log("initialized.");
             }
 
+            function link(s) {
+                log("info", "link(s) clicked moving to", s);
+                var win = window.open(s, '_blank');
+                win.focus();
+            }
+
+            /*
+             ontouchstart="touchStart(event,'content');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);"
+             */
 
 
         </script>
 
-
-
     </head>
     <body onload="init();">
 
-        <div id="story" class="storyDiv"   ontouchstart="touchStart(event,'story');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);"  >
+        <div id="story" class="storyDiv" >
             <table>
                 <tr>
                     <td colspan="1" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="buttonSmall">Contact</span></td>
                     <td colspan="1" id="tdHead" class="headerTdClass"><span id="headerStory" class="headerDivClass"></span></td>
                     <td colspan="1" id="tdFoot2" class="footerTdClass" onclick="info()"><span  id="button2"  class="buttonSmall">Disclaimer</span></td>
                 </tr>
-                <td colspan="1" id="tdPrevious" onclick="previous()"><span id="previous"  class="navigationArrows"></span></td>
-                <td colspan="1" ><span id="content"   class="storyContentDivClass"  ontouchstart="touchStart(event,'content');"  ontouchend="touchEnd(event);" ontouchmove="touchMove(event);" ontouchcancel="touchCancel(event);" ></span></td>
-                <td colspan="1" id="tdNext" onclick="next()"><span id="next"   class="navigationArrows"></span></td>
-
-                <tr>                    
-                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">Swipe or Click - Next&nbsp;Page&nbsp;&#187;</span></td>    
-                </tr>            
-
-
             </table>
 
+            <table>
+                <tr>
+                    <td colspan="1" id="tdPrevious" onclick="previous()"><span id="previous"  class="navigationArrows"></span></td>
+                    <td colspan="1" ><span id="content"   class="storyContentDivClass"   ></span></td>
+                    <td colspan="1" id="tdNext" onclick="next()"><span id="next"   class="navigationArrows"></span></td>
+                </tr>
+                <tr>                    
+                    <td colspan="3" id="tdFoot1" class="footerTdClass" onclick="next()"><span  id="button1"  class="button">Next&nbsp;Page&nbsp;&#187;</span></td>    
+                </tr> 
+            </table>
         </div>
 
 
@@ -788,7 +800,7 @@
         <div id="slide-8" class="container"  >A word of caution, though: Don’t forget to appreciate the value of <b><i>intuition</i></b> and <b><i>gut feeling</i></b>. </div>
         <div id="slide-9" class="container"  >That’s it in a nutshell.  </div>
         <div id="slide-10" class="container"  >I’m usually busy but <b><i>always</i></b> more than happy to help. Let’s talk...   </div>
-        <div id="slide-11" class="container"  ><a href="mailto:alex@data-yield.com" >alex@data-yield.com</a><br/><a href="https://ua.linkedin.com/in/alexandersickert" target="_blank">LinkedIn</a>&nbsp;<a href="https://www.facebook.com/DataYield-218722151512602/" target="_blank">Facebook</a><br/><a href="http://alexandersickert.com" target="_blank">Blog</a><br/><a href="https://github.com/AlexSickert" target="_blank">GitHub</a></div>
+        <div id="slide-11" class="container"  ><span class="buttonWhite" onclick="link('mailto:alex@data-yield.com')" >alex@data-yield.com</span><br/><span class="buttonWhite"  onclick="link('https://ua.linkedin.com/in/alexandersickert')" >LinkedIn</span>&nbsp;<span  class="buttonWhite" onclick="link('https://www.facebook.com/DataYield-218722151512602/')" >Facebook</span><br/><span  class="buttonWhite" onclick="link('http://alexandersickert.com')" >Blog</span>&nbsp;<span  class="buttonWhite" onclick="link('https://github.com/AlexSickert')" >GitHub</span></div>
 
     </body>
 </html>
