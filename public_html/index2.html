@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  <style type="text/css">
+    @import url(https://fonts.googleapis.com/css?family=Lato:100,200,300,900,thin);
+    @import url(https://fonts.googleapis.com/css?family=Lusitana);
+    @import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+
+
+
+    .bodyClass {
+      background-color: #ffffff;
+      /*max-width: 468pt; */
+      padding: 10pt 72pt 72pt 72pt;
+      font-family: 'Montserrat', serif;
+
+    }
+
+    .pNavigation {
+      text-align: right
+    }
+
+    .sNavigation {}
+
+    .pQuote {
+      text-align: center
+    }
+
+    .sQuote {
+      color: #999999;
+      font-weight: 400;
+      text-decoration: none;
+      vertical-align: baseline;
+      font-size: 40pt;
+      font-family: "Calibri";
+      font-style: italic
+    }
+
+
+    .pH1 {
+      padding-top: 20px;
+      text-align: left
+    }
+
+    .sH1 {
+      font-size: 20pt;
+      color: #444444;
+      font-weight: bold;
+    }
+
+    .pH2 {
+      margin-left: 40px;
+      text-align: left
+    }
+
+    .sH2 {
+      font-size: 16pt;
+      color: #444444;
+      font-weight: bold;
+    }
+
+    .pNormal {
+      text-align: left
+    }
+
+    .sNormal {
+      font-weight: normal;
+    }
+
+    .xxx {
+      color: red;
+    }
+
+    .ulNormal {}
+
+    .ul2 {
+      margin-left: 40px;
+    }
+
+    .liNormal {
+      margin: 0 0 10px 0;
+    }
+
+    .pButton {
+      text-align: center;
+      height: 100px;
+
+
+    }
+
+    .bButton {
+      border-radius: 25px;
+      padding: 20px;
+      border: 10px #ffffff;
+      color: #ffffff;
+      background-color: #cc0000;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .aNavigation {
+      font-weight: bold;
+      color: #cc0000;
+    }
+
+
+    .aNormal {
+      font-weight: bold;
+      color: #cc0000;
+    }
+
+    table {
+
+      width: 100%;
+    }
+
+    .tdRight {
+      text-align: right;
+      vertical-align: top;
+    }
+
+    .tdCenter {
+      text-align: center;
+
+    }
+
+    .tdLeft {
+      text-align: left;
+    }
+  </style>
+
+  <script>
+    function ajaxRequest() {
+      var http = false;
+      try {
+        http = new XMLHttpRequest();
+      } catch (e1) {
+        try {
+          http = new ActiveXObject("Msxml2.xmlhttp");
+        } catch (e2) {
+          try {
+            http = new ActiveXObject("Microsoft.xmlhttp");
+          } catch (e3) {
+            http = false;
+          }
+        }
+      }
+      return http;
+    }
+
+
+    /*
+     * Dump whatever comes to console
+     * @returns {undefined}
+     */
+    function defaultCallbackToConsole(x) {
+      console.log(x);
+    }
+
+
+    function getWidth() {
+      var screenWidth = 0;
+
+      try {
+        if (screen.width > window.innerWidth) {
+          screenWidth = window.innerWidth;
+        } else {
+          screenWidth = screen.width;
+        };
+      } catch (e) {
+        //log("error", "2 getWidth()", "error when positioning id:  error: " + e.description);
+      }
+
+      //console.log("screenWidth: " + screenWidth);
+      //log("info", "getWidth()", "screenWidth: " + screenWidth);
+      return screenWidth;
+    }
+
+
+    function getHeight() {
+      var screenHeight = 0;
+
+      try {
+        if (screen.height > window.innerHeight) {
+          screenHeight = window.innerHeight;
+        } else {
+          screenHeight = screen.height;
+        }
+
+      } catch (e) {
+        //log("error", "2 getHeight()", "error when positioning id:  error: " + e.description);
+      }
+
+      //console.log("screenHeight: " + screenHeight);
+      //log("info", "getHeight()", "screenHeight: " + screenHeight);
+      return screenHeight;
+
+    }
+
+
+
+
+
+    function log(level, topic, text) {
+      try {
+
+
+        var nVer = navigator.appVersion;
+        var nAgt = navigator.userAgent;
+        var browserName = navigator.appName;
+        var fullVersion = '' + parseFloat(navigator.appVersion);
+
+        var info = '';
+
+        info += "|" + nVer;
+        info += "|" + nAgt;
+        info += "|" + browserName;
+        info += "|" + fullVersion;
+        info += "|" + screen.width;
+        info += "|" + screen.height;
+        info += "|" + getWidth();
+        info += "|" + getHeight();
+        info += "|" + level;
+        info += "|" + topic;
+        info += "|" + text;
+        info += "|";
+
+
+        if ('referrer' in document) {
+          info += document.referrer;
+        }
+
+        info = encodeURI(info);
+        defaultCallbackToConsole("sending: " + info);
+
+        var url = "http://data-yield.com/logger.php?k=lk23645jha3sdf6uyeqwthavk45vk&info=" + info;
+        pushDataByGet(url, defaultCallbackToConsole);
+      } catch (e) {
+        defaultCallbackToConsole(e);
+      }
+    }
+
+    /*
+     * send data to server via ajax and get method
+     * @returns {undefined}
+     */
+    function pushDataByGet(url, callback) {
+      var http = ajaxRequest();
+      var mode = "GET";
+      http.open(mode, url, true);
+      http.onreadystatechange = function() {
+        if (http.readyState === 4) {
+          callback(http.responseText);
+        }
+      };
+      http.send(mode);
+    }
+
+
+    function goto(s) {
+      log("info", "goto-page", s);
+      window.location.href = s;
+    }
+
+    function gotoNew(s) {
+      log("info", "gotoNew-page", s);
+      window.open(s, '_blank');
+    }
+
+    function track(s) {
+      log("info", "link-clicked", s);
+      console.log(s);
+
+    }
+
+
+    function init() {
+      log("info", "body-loaded", "");
+    }
+  </script>
+
+</head>
+
+<body class="bodyClass" onload="init();">
+
+  <div id="bodyDiv">
+
+    <table>
+      <tr>
+        <td class="tdLeft">
+          <img src="logo2.png" width="300px">
+        </td>
+        <td class="tdRight">
+          <a class="aNavigation" onclick="track('blog')" href="http://alexandersickert.com/" target="_blank">BLOG </a>&nbsp;
+          <!--    <a class="aNavigation" href="" target="_blank">mobile version</a>&nbsp;  -->
+          <a class="aNavigation" onclick="track('imprint')" href="imprint.html">Imprint</a>&nbsp;
+          <a class="aNavigation" onclick="track('contact')" href="#contact">Contact</a>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td class="tdCenter">
+          <p class="pQuote"><span class="sQuote">“I code because I love this 'flow state' when I'm deeply immersed in coding, almost foregt time and space, and a few hours later I see a huge progress in the project. That's deeply satisfying.”</span></p>
+
+        </td>
+        <td class="tdRight">
+          <img src="4flip.jpg" width="300px">
+        </td>
+      </tr>
+    </table>
+
+
+
+
+    <p class="pH1"><span class="sH1">IN A NUTSHELL...</span></p>
+
+    <p class="pNormal"><span class="sNormal">... companies work with me because I combine 3 features:</span></p>
+
+    <ul class="ulNormal">
+      <li class="liNormal"><span class="sNormal">Technical skills in machine learning, predictive analytics and application development</span></li>
+      <li class="liNormal"><span class="sNormal">Business understanding</span></li>
+      <li class="liNormal"><span class="sNormal">Communication skills</span></li>
+    </ul>
+
+    <p class="pNormal"><span class="sNormal">If you need someone who understands both business and IT and can communicate with various stakeholders, then we should talk.</span></p>
+
+    <p class="pNormal"><span class="sNormal">For more than 15 years I work in IT. My focus is on the financial and medical industry.</span></p>
+    <p class="pNormal"><span class="sNormal">I’m a German national and live in Kiev/Ukraine.</span></p>
+    <p class="pNormal"><span class="sNormal"><b>What I am searching for:</b> projects in the medical or financial sphere where I can apply my technical knowledge using Python, R, Keras, TensorFlow, OpenCV, Java etc.</span></p>
+    <p class="pNormal"><span class="sNormal"><b>Price:</b> Fixed price or USD 35 per hour</span></p>
+    <p class="pH1"><span class="sH1">DETAILS</span></p>
+    <p class="pH2"><span class="sH2">IT Skills</span></p>
+
+    <ul class="ul2">
+      <li class="liNormal"><span class="sNormal">More than 10 years coding experience</span></li>
+      <li class="liNormal"><span class="sNormal">Recently upgraded skills in machine learning, data science <a class="aNormal"  onclick="track('coursera')" target="_blank"  href="https://www.coursera.org/specializations/jhu-data-science">(more)</a> and artificial intelligence <a class="aNormal" target="_blank"  onclick="track('udacity')"  href="https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013">(more)</a></span></li>
+      <li class="liNormal"><span class="sNormal">Technology stack: <i>Languages</i>: Python, Java, R, JavaScript, VBA <i>Frameworks/libraries</i>: Keras, TensorFlow, OpenCV, scikit-learn, pydicom <i>Databases</i>: MySQL, Postgres, ElasticSearch, Spark <i>IDEs</i>: Intellij, PyCharm, Spyder, Jupyter, RStudio, Netbeans, pgAdmin III,  MySQL Workbench</span></li>
+    </ul>
+
+    <p class="pH2"><span class="sH2">Management Skills</span></p>
+
+    <ul class="ul2">
+      <li class="liNormal"><span class="sNormal">Experience in turnaround management</span></li>
+      <li class="liNormal"><span class="sNormal">MBA and MSc in Finance <a class="aNormal"  onclick="track('oubs')" target="_blank"  href="http://www.openuniversity.edu/courses/postgraduate/qualifications/f61">(more)</a></span></li>
+      <li class="liNormal"><span class="sNormal">Managed up to 300 people</span></li>
+    </ul>
+
+
+    <p class="pH2"><span class="sH2">Communication skills</span></p>
+
+    <ul class="ul2">
+      <li class="liNormal"><span class="sNormal">Enthusiastic learner of foreign languages</span></li>
+      <li class="liNormal"><span class="sNormal">Worked as photographer <a class="aNormal" target="_blank"  onclick="track('photography')"  href="http://alexandersickert.com/my-time-as-a-photographer/">(more)</a></span></li>
+    </ul>
+
+    <p class="pNormal"><span class="sNormal"><b>For more detailed information please see my recent employment history and CV on LinkedIn: <a class="aNormal"  onclick="track('linkedin')" target="_blank" href="https://www.linkedin.com/in/alexandersickert/">https://www.linkedin.com/in/alexandersickert/</a></b></span></p>
+    <p class="pH1"><span class="sH1">BLOG & GITHUB</span></p>
+    <p class="pButton">
+      <button type="button" class="bButton" onclick="gotoNew('http://www.alexandersickert.com/')">AlexanderSickert.com</button>
+      <button type="button" class="bButton" onclick="gotoNew('https://github.com/AlexSickert')">GitHub</button>
+
+
+    </p>
+    <a id="contact"></a>
+    <p class="pH1"><span class="sH1">CONTACT</span></p>
+    <p class="pButton">
+      <button type="button" class="bButton" onclick="goto('mailto:alex@data-yield.com')">Let’s talk!</button>
+      <button type="button" class="bButton" onclick="goto('mailto:alex@data-yield.com')">Email: alex@data-yield.com</button>
+      <button type="button" class="bButton" onclick="goto('phone:+380974796793')">Phone: +380974796793</button>
+      <button type="button" class="bButton" onclick="goto('skype:this_is_alex')">Skype: this_is_alex</button>
+      <button type="button" class="bButton" onclick="gotoNew('https://www.linkedin.com/in/alexandersickert/')">LinkedIn</button>
+    </p>
+
+
+  </div>
+</body>
+
+</html>
